@@ -1,5 +1,6 @@
 #include "../inc/inventory.h"
 #include <random>
+#include <iostream>
 int inventory::reserve_upc() {
     srand(42);
     auto random_upc_location = int(rand()%upc_generator.size());
@@ -36,7 +37,6 @@ void inventory::initialize_upc() {
 inventory::inventory(){
     // Initialize UPCs
     initialize_upc();
-
     head = nullptr;
 }
 
@@ -166,6 +166,45 @@ void inventory::adjust_inventory(int input_upc, int new_inventory) {
 inventory_node* inventory::get_head() {
     return head;
 }
+
+void swap(inventory_node* a, inventory_node* b){
+    int temp_upc = a->upc;
+    std::string temp_name = a->name;
+    int temp_count = a->inventory_count;
+    stack temp_stack = stack();
+    temp_stack = a->price;
+    a->upc = b->upc;
+    a->name = b->name;
+    a->inventory_count = b->inventory_count;
+    a->price = b->price;
+    b->upc = temp_upc;
+    b->price = temp_stack;
+    b->inventory_count = temp_count;
+    b->name = temp_name;
+}
+
 void inventory::sort_by_lowest_price() {
-    //TODO: Double Sort Function
+    bool swapped = true;
+    while(swapped) {
+        swapped = false;
+        inventory_node* current = head;
+        while(head && current->next) {
+            inventory_node* a = current;
+            inventory_node* b = current->next;
+            int a_price = a->price.top().value;
+            int b_price = a->next->price.top().value;
+            int a_inventory = a->inventory_count;
+            int b_inventory = a->next->inventory_count;
+
+            if (a_price > b_price) {
+                swap(a, b);
+                swapped = true;
+            }
+            else if(a_price == b_price && a_inventory > b_inventory){
+                swap(a, b);
+                swapped = true;
+            }
+            current = current->next;
+        }
+    }
 }

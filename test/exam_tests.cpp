@@ -246,9 +246,10 @@ protected:
         test_inventory = inventory();
         // generate 100 random items
         srand(2018);
-        for(int i = 0; i < 100; i++) {
-            int new_price = rand() % 100;
-            int new_count = rand() % 1000;
+        for(int i = 0; i < 200; i++) {
+            srand((rand()*i)%10000);
+            int new_price = (rand())% 100;
+            int new_count = (rand())% 1000;
             int new_date = 1521581400 + ((rand() % 31557600) - 31557600);
             std::string new_name = "Item";
             new_name += std::to_string(i);
@@ -315,7 +316,7 @@ TEST(crashTest, inventoryRemoveSKU){
 
 TEST_F(InventoryFixture, AccessSKU){
     test_inventory.add_sku("test item", 42, 2000, 946713600);
-    int item_count, item_price, price_date;
+    int item_count = 0, item_price = 0;
     std::vector<int> item_codes;
     std::string item_name;
 
@@ -387,6 +388,14 @@ TEST_F(InventoryFixture, AdjustSKU){
 
 }
 
+TEST_F(InventoryFixture, RemoveSKU){
+    inventory test_inventory = inventory();
+    test_inventory.add_sku("test item", 42, 2000, 946713600);
+    test_inventory.add_sku("test item2", 420, 2001, 1521581400);
+    int item_code = test_inventory.get_upc(std::string("test item"))[0];
+    test_inventory.remove_sku(item_code);
+}
+
 TEST_F(InventoryFixture, EmptyTests){
     std::vector<int> item_upc_vec;
     EXPECT_NO_THROW(item_upc_vec = empty_inventory.get_upc("Empty Test"));
@@ -450,5 +459,51 @@ TEST_F(InventoryFixture, InvalidUPCTests){
         EXPECT_ANY_THROW(test_inventory.adjust_inventory(upc_value, inventory));
 
         EXPECT_ANY_THROW(test_inventory.remove_sku(upc_value));
+    }
+}
+
+TEST_F(InventoryFixture, HighLowPriceTests){
+    for(int item_to_adjust = 20; item_to_adjust<30;item_to_adjust++) {
+        std::string item_name_to_adjust = "Item" + std::to_string(item_to_adjust);
+        std::vector<int> item_upc_vec;
+        EXPECT_NO_THROW(item_upc_vec = test_inventory.get_upc(item_name_to_adjust));
+        EXPECT_EQ(1, item_upc_vec.size());
+        int item_upc = item_upc_vec[0];
+
+        int low_value = 0;
+        int high_value = 0;
+        EXPECT_NO_THROW(low_value = test_inventory.get_price(item_upc));
+        EXPECT_NO_THROW(high_value = test_inventory.get_price(item_upc));
+        for (int i = 5; i < 25; i++) {
+            int price;
+            EXPECT_NO_THROW(price = test_inventory.get_price(item_upc));
+            price = (price + i*rand()%127)% 100 - 100;
+            if(price < low_value) low_value = price;
+            if(price > high_value) high_value = price;
+            EXPECT_NO_THROW(test_inventory.adjust_price(item_upc, price, 1521581400 + 3600*i));
+        }
+        int calculated_low_value = 0;
+        int calculated_high_value = 0;
+        EXPECT_NO_THROW(calculated_high_value = test_inventory.get_highest_price(item_upc));
+        EXPECT_NO_THROW(calculated_low_value = test_inventory.get_lowest_price(item_upc));
+
+        EXPECT_EQ(high_value, calculated_high_value);
+        EXPECT_EQ(low_value, calculated_low_value);
+    }
+}
+
+TEST_F(InventoryFixture, SortTests){
+    test_inventory.sort_by_lowest_price();
+    inventory_node* runner = test_inventory.get_head();
+    while(runner && runner->next) {
+        int price_a = runner->price.top().value;
+        int price_b = runner->next->price.top().value;
+        EXPECT_LE(price_a, price_b);
+        if(price_a == price_b){
+            int inv_a = runner->inventory_count;
+            int inv_b = runner->next->inventory_count;
+            EXPECT_LE(inv_a,inv_b);
+        }
+        runner = runner->next;
     }
 }

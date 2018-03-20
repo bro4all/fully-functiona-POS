@@ -85,7 +85,8 @@ While you haven't seen a linked list implemented like this before, where you don
 
 `void adjust_inventory(int upc, int inventory_count)`: Given a UPC and inventory count, update the inventory count. If the UPC doesn't exist, throw an error. 
 
-`void sort_by_lowest_price()`: Sort the inventory by lowest price, and then by name. You can use any sorting algorithm you have learned.
+`void sort_by_lowest_price()`: Sort the inventory by lowest price, and then by inventory. You can use any sorting algorithm you have learned.
+
 
 ## Hints ##
 * Every UPC is unique. When you find the one you are looking for, you are done looking.
