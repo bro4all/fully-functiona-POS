@@ -1,21 +1,10 @@
 #ifndef CMPE126EXAM1_TUESDAY_LINKED_LIST_H
 #define CMPE126EXAM1_TUESDAY_LINKED_LIST_H
 
-struct value_date{
-    int value;
-    int date;
-};
-
-class node_stack {
-public:
-    node_stack *next;
-    struct value_date data;
-    explicit node_stack(value_date data) : data(data), next(nullptr){};
-};
-
+#include "stack_node.h"
 
 class stack{
-    node_stack* head;
+    stack_node* stack_top;
 
 public:
     stack();
@@ -26,7 +15,7 @@ public:
     struct value_date top();
 
     stack& operator=(const stack& RHS);
-    stack merge(const stack& RHS) const;
+    stack operator+(const stack& RHS) const;
 };
 
 #endif

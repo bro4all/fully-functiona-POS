@@ -1,11 +1,12 @@
 #ifndef CMPE126EXAM1_TUESDAY_INVENTORY_H
 #define CMPE126EXAM1_TUESDAY_INVENTORY_H
 
-#include "node.h"
+#include "inventory_node.h"
 #include <map>
+#include <vector>
 
 class inventory{
-    node* head;
+    inventory_node* head;
 
     static std::map<unsigned, bool> upc_generator;
     static unsigned get_unique_upc();
@@ -18,7 +19,7 @@ public:
     void add_sku(std::string name, int price, int inventory, int date);
     void remove_sku(int upc);
 
-    unsigned get_upc(std::string name);
+    std::vector<unsigned int> get_upc(std::string name);
     int get_price(int upc);
     int get_inventory(int upc);
     int get_name(int upc);

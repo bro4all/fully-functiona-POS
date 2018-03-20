@@ -24,8 +24,8 @@ void inventory::remove_sku(int upc) {
 
 }
 
-unsigned inventory::get_upc(std::string name) {
-    return 0;
+std::vector<unsigned int> inventory::get_upc(std::string name) {
+    return std::vector<unsigned>();
 }
 
 int inventory::get_price(int upc) {

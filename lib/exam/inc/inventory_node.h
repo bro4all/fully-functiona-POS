@@ -4,13 +4,17 @@
 #include <string>
 #include "stack.h"
 
-class node{
+class inventory_node{
 public:
+    inventory_node* next;
+
     int upc;
     std::string name;
     int inventory_count;
     stack price;
-};
 
+    inventory_node(int upc, std::string name, int count, int price);
+    ~inventory_node();
+};
 
 #endif
