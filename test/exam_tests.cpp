@@ -1,6 +1,5 @@
 #include "gtest/gtest.h"
 #include "inventory.h"
-#include <time.h>
 
 class StackFixture : public ::testing::Test {
 
@@ -219,3 +218,20 @@ TEST_F(StackFixture, stackOperatorPlusOverload) {
     stack3 = stack() + *stack2;
     EXPECT_NO_THROW(stack3.top());
 }
+
+class NodeFixture : public ::testing::Test {
+
+protected:
+    virtual void TearDown() {
+
+    }
+
+    virtual void SetUp() {
+
+    }
+
+
+public:
+
+};
+

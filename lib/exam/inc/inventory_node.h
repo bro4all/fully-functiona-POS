@@ -13,7 +13,7 @@ public:
     int inventory_count;
     stack price;
 
-    inventory_node(int upc, std::string name, int count, int price);
+    inventory_node(int upc, std::string name, int count, int price, int date);
     ~inventory_node();
 };
 
