@@ -11,28 +11,27 @@ int inventory::reserve_upc() {
 }
 
 void inventory::release_upc(int input_upc) {
-    auto val = upc_generator[input_upc];
-    if(!valid_upc(input_upc)) throw "UPC not in map";
-    else upc_generator[input_upc] = true;
+    auto val =  upc_generator.find(input_upc);
+    if(val->first == input_upc && !val->second) val->second = true;
+    else throw "UPC not valid";
 }
 
 bool inventory::valid_upc(int input_upc) {
-    auto val = upc_generator[input_upc];
-    if(val == upc_generator.end()) return false;
-    return true;
+    auto val =  upc_generator.find(input_upc);
+    return val->first == input_upc;
 }
 
 void inventory::initialize_upc() {
     srand(17); // Initial seed
     for(int i = 1; i< 100000; i++) {
         int unique_upc = 1000000 + rand() % 9000000;
-        upc_generator.insert(std::pair(unique_upc, true));
+        upc_generator.insert(std::pair<int, bool>(unique_upc, true));
     }
 }
 
 inventory::inventory(){
     // Initialize UPCs
-    //TODO: initialize the UPC Generator
+    initialize_upc();
 
     head = nullptr;
 }
