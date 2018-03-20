@@ -85,6 +85,18 @@ TEST_F(StackFixture, stackBasicFunctions){
     }
     // Check for multiple empty top calls again
     for(int i = 0; i < 20; i++) EXPECT_ANY_THROW(stack2->top());
+
+
+    // Destructor check
+    stack* stack4 = new stack();
+    to_add = value_date();
+    for(int i = 1; i < 100; i++) {
+        to_add.date = i;
+        to_add.value = i;
+        stack4->push(to_add);
+    }
+    delete stack4;
+
 }
 
 TEST_F(StackFixture, stackOperatorEqualsOverload) {
@@ -158,12 +170,52 @@ TEST_F(StackFixture, stackOperatorPlusOverload) {
     // Do the merge operation
     stack stack3 = *stack1 + *stack2;
 
-    // Check merge operation
-    for (int i = 0; i<1000; i+=2) {
-        int lower = stack3.top().date;
-        stack3.pop();
+    // Check simple merge operation
+    for (int i = 1; i<1000; i++) {
         int higher = stack3.top().date;
+        stack3.pop();
+        int lower = stack3.top().date;
+        EXPECT_LT(lower, higher);
+    }
+    // refill 2 stacks with different values
+    stack1 = new stack();
+    stack2 = new stack();
+    to_add = value_date();
+    to_add.date = 2;
+    to_add.value = 1;
+    stack1->push(to_add);
+    for (int i = 1; i <= 10; i++) {
+        to_add.date = 2 * stack1->top().date;
+        to_add.value = i;
+        stack1->push(to_add);
+    }
+    to_add.date = 1000;
+    to_add.value = 2;
+    stack2->push(to_add);
+    for (int i = 1; i <= 10; i++) {
+        to_add.date = 2* i + stack2->top().date;
+        to_add.value = -i;
+        stack2->push(to_add);
+    }
+
+    // Do the merge operation
+    stack3 = *stack1 + *stack2;
+
+    // Check simple merge operation
+    for (int i = 1; i<20; i++) {
+        int higher = stack3.top().date;
+        stack3.pop();
+        int lower = stack3.top().date;
         EXPECT_LT(lower, higher);
     }
 
+    // check simple empty merge
+    stack3 = stack() + stack();
+    EXPECT_ANY_THROW(stack3.top());
+
+    // Check 1 sided empty merge
+    stack3 = *stack1 + stack();
+    EXPECT_NO_THROW(stack3.top());
+    stack3 = stack() + *stack2;
+    EXPECT_NO_THROW(stack3.top());
 }

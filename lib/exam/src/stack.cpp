@@ -45,30 +45,70 @@ stack &stack::operator=(const stack &RHS) {
 
 stack stack::operator+(const stack &RHS) const {
     stack* to_return = new stack();
-    stack left = *this;
-    stack right = RHS;
     stack_node* left_runner = stack_top;
     stack_node* right_runner = RHS.stack_top;
+    stack_node* return_runner = nullptr;
     while(left_runner || right_runner) {
-        if(left_runner && !right_runner){
-            while(left_runner){
-                to_return->push(left_runner->data);
+        if(!return_runner && (left_runner && right_runner)){
+            if(left_runner->data.date > right_runner->data.date){
+                return_runner = new stack_node(left_runner->data);
                 left_runner = left_runner->next;
+            }
+            else{
+                return_runner = new stack_node(right_runner->data);
+                right_runner = right_runner->next;
+            }
+            to_return->stack_top = return_runner;
+        }
+        else if(!return_runner && (left_runner && !right_runner)){
+//            to_return->stack_top = return_runner;
+//            return_runner = new stack_node(left_runner->data);
+//            left_runner = left_runner->next;
+//            to_return->stack_top = return_runner;
+//            while(left_runner){
+//                return_runner->next = new stack_node(left_runner->data);
+//                left_runner = left_runner->next;
+//                return_runner = return_runner->next;
+//            }
+            *to_return = *this;
+            break;
+        }
+        else if(!return_runner && (!left_runner && right_runner)){
+//            to_return->stack_top = return_runner;
+//            return_runner = new stack_node(right_runner->data);
+//            right_runner = right_runner->next;
+//            to_return->stack_top = return_runner;
+//            while(right_runner){
+//                return_runner->next = new stack_node(right_runner->data);
+//                right_runner = right_runner->next;
+//                return_runner = return_runner->next;
+//            }
+            *to_return = RHS;
+            break;
+        }
+        else if(left_runner && !right_runner){
+            while(left_runner){
+                return_runner->next = new stack_node(left_runner->data);
+                left_runner = left_runner->next;
+                return_runner = return_runner->next;
             }
         }
         else if(!left_runner && right_runner){
             while(right_runner){
-                to_return->push(right_runner->data);
+                return_runner->next = new stack_node(right_runner->data);
                 right_runner = right_runner->next;
+                return_runner = return_runner->next;
             }
         }
         else if(left_runner->data.date > right_runner->data.date){
-            to_return->push(left_runner->data);
+            return_runner->next = new stack_node(left_runner->data);
             left_runner = left_runner->next;
+            return_runner = return_runner->next;
         }
         else{
-            to_return->push(right_runner->data);
+            return_runner->next = new stack_node(right_runner->data);
             right_runner = right_runner->next;
+            return_runner = return_runner->next;
         }
     }
     return *to_return;
