@@ -1,4 +1,4 @@
-#include "gtest/gtest.h
+#include "gtest/gtest.h"
 
 class LabExamFixture : public ::testing::Test {
 
@@ -21,18 +21,18 @@ TEST(crashTest, constructorTest) {
 
 }
 
-TEST_F(LabExamFixture, basicNextToken) {
+TEST_F(LabExamFixture, test1) {
 
 }
 
-TEST_F(LabExamFixture, multiDigitNextToken) {
+TEST_F(LabExamFixture, test2) {
 
 }
 
-TEST_F(LabExamFixture, multiDigitCurrentToken) {
+TEST_F(LabExamFixture, test3) {
 
 }
 
-TEST_F(LabExamFixture, CheckNextType) {
+TEST_F(LabExamFixture, ) {
 
 }
