@@ -11,8 +11,8 @@ public:
     ~stack();
 
     void pop();
-    void push(struct value_date);
-    struct value_date top();
+    void push(struct value_date input);
+    const struct value_date top() const;
 
     stack& operator=(const stack& RHS);
     stack operator+(const stack& RHS) const;
