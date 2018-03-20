@@ -219,7 +219,23 @@ TEST_F(StackFixture, stackOperatorPlusOverload) {
     EXPECT_NO_THROW(stack3.top());
 }
 
-class NodeFixture : public ::testing::Test {
+TEST(InventoryNodeTest, constructorTest){
+    inventory_node test_node = inventory_node(1, "2", 3, 4, 5);
+    EXPECT_EQ(1, test_node.upc);
+    EXPECT_EQ("2", test_node.name);
+    EXPECT_EQ(3, test_node.inventory_count);
+    EXPECT_EQ(4, test_node.price.top().value);
+    EXPECT_EQ(5, test_node.price.top().date);
+    EXPECT_EQ(nullptr, test_node.next);
+}
+
+TEST(InventoryNodeTest, deconstructorTest){
+    inventory_node* test_node = new inventory_node(1, "2", 3, 4, 5);
+    delete test_node;
+}
+
+
+class InventoryFixture : public ::testing::Test {
 
 protected:
     virtual void TearDown() {
@@ -227,13 +243,90 @@ protected:
     }
 
     virtual void SetUp() {
-
+        test_inventory = inventory();
+        // generate 100 random items
+        srand(2018);
+        for(int i = 0; i < 100; i++) {
+            int new_price = rand() % 100;
+            int new_count = rand() % 1000;
+            int new_date = 1521581400 + ((rand() % 31557600) - 31557600);
+            std::string new_name = "Item";
+            new_name += std::to_string(i);
+            test_inventory.add_sku(new_name, new_price, new_count, new_date);
+        }
     }
 
 
 public:
-
+    inventory test_inventory;
 };
 
+TEST(crashTest, inventoryConstructorTest) {
+    // Check to see if things crash during basic construction/deconstruction
+    inventory crash_test = inventory();
+    inventory* new_crash_test = new inventory();
+    delete new_crash_test;
+}
+
+TEST(crashTest, inventoryAddSKU){
+    inventory test_inventory = inventory();
+    test_inventory.add_sku("test item", 42, 2000, 946713600);
+}
+
+TEST(crashTest, inventoryAccessSKU){
+    inventory test_inventory = inventory();
+    test_inventory.add_sku("test item", 42, 2000, 946713600);
+    int item_code = test_inventory.get_upc(std::string("test item"))[0];
+
+    test_inventory.get_inventory(item_code);
+    test_inventory.get_price(item_code);
+    test_inventory.get_name(item_code);
+    test_inventory.get_lowest_price(item_code);
+    test_inventory.get_highest_price(item_code);
+}
+
+TEST(crashTest, inventoryAdjustSKU){
+    inventory test_inventory = inventory();
+    test_inventory.add_sku("test item", 42, 2000, 946713600);
+    std::vector<int> item_codes;
+
+    item_codes = test_inventory.get_upc(std::string("test item"));
+    int item_code = item_codes[0];
+    test_inventory.adjust_inventory(item_code, 2001);
+    test_inventory.adjust_price(item_code, 17, 1521581400);
+}
+
+TEST(crashTest, inventorySort){
+    inventory test_inventory = inventory();
+    test_inventory.add_sku("test item", 42, 2000, 946713600);
+    test_inventory.add_sku("test item2", 420, 2001, 1521581400);
+    test_inventory.sort_by_lowest_price();
+}
+
+TEST(crashTest, inventoryRemoveSKU){
+    inventory test_inventory = inventory();
+    test_inventory.add_sku("test item", 42, 2000, 946713600);
+    test_inventory.add_sku("test item2", 420, 2001, 1521581400);
+    int item_code = test_inventory.get_upc(std::string("test item"))[0];
+    test_inventory.remove_sku(item_code);
+}
+
+TEST_F(InventoryFixture, AccessSKU){
+    test_inventory.add_sku("test item", 42, 2000, 946713600);
+    int item_count, item_price, price_date;
+    std::vector<int> item_codes;
+    std::string item_name;
+
+    EXPECT_NO_THROW(item_codes = test_inventory.get_upc(std::string("test item")));
+    EXPECT_EQ(1,item_codes.size());
+    int item_code = item_codes[0];
+
+    EXPECT_NO_THROW(item_count = test_inventory.get_inventory(item_code));
+    EXPECT_EQ(2000, item_count);
+    EXPECT_NO_THROW(item_price = test_inventory.get_price(item_code));
+    EXPECT_EQ(42, item_price);
+    EXPECT_NO_THROW(item_name = test_inventory.get_name(item_code));
+    EXPECT_EQ("test item", item_name);
+}
 // TODO: The rest of the tests
 

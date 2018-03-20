@@ -2,6 +2,7 @@
 #include <random>
 //TODO: Write UPC Functions
 int inventory::reserve_upc() {
+    srand(42);
     auto random_upc_location = int(rand()%upc_generator.size());
     auto a = upc_generator.begin();
     for(auto a = upc_generator.begin(); --random_upc_location != 0; a++);
@@ -17,15 +18,15 @@ void inventory::release_upc(int input_upc) {
 }
 
 bool inventory::valid_upc(int input_upc) {
-    auto val =  upc_generator.find(input_upc);
+    auto val = inventory::upc_generator.find(input_upc);
     return val->first == input_upc;
 }
 
 void inventory::initialize_upc() {
     srand(17); // Initial seed
-    for(int i = 1; i< 100000; i++) {
+    for(int i = 1; i< 1000; i++) {
         int unique_upc = 1000000 + rand() % 9000000;
-        upc_generator.insert(std::pair<int, bool>(unique_upc, true));
+        inventory::upc_generator.insert(std::pair<int, bool>(unique_upc, true));
     }
 }
 
@@ -38,22 +39,21 @@ inventory::inventory(){
 
 inventory::~inventory() {
     while(head){
-        inventory_node* temp = head;
+        inventory_node* temp = head->next;
         delete head;
         head = temp;
     }
 }
 
 void inventory::add_sku(std::string name, int price, int inventory, int date) {
-    unsigned unique_upc = reserve_upc();
+    int unique_upc = reserve_upc();
     inventory_node *temp = new inventory_node(unique_upc, name, inventory, price, date);
     temp->next = head;
     head = temp;
-
 }
 
 void inventory::remove_sku(int input_upc) {
-    if(valid_upc) {
+    if(valid_upc(input_upc)) {
         if (head->upc == input_upc) {
             inventory_node *temp = head;
             head = head->next;
@@ -77,7 +77,7 @@ void inventory::remove_sku(int input_upc) {
 std::vector<int> inventory::get_upc(std::string input_name) {
     std::vector<int> upcs_to_return;
     for(inventory_node* current = head; current; current = current->next){
-        if(current->name == input_name) upcs_to_return.push_back(current->upc);
+        if(current->name.compare(input_name) == 0) upcs_to_return.push_back(current->upc);
     }
     return upcs_to_return;
 }
@@ -106,7 +106,8 @@ std::string inventory::get_name(int input_upc) {
 int inventory::get_lowest_price(int input_upc) {
     for(inventory_node* current = head; current; current = current->next){
         if(current->upc == input_upc){
-            stack pricing_history = current->price;
+            stack pricing_history = stack();
+            pricing_history = current->price;
             int lowest_price = pricing_history.top().value;
             while(!pricing_history.empty()){
                 if(pricing_history.top().value<lowest_price) lowest_price = pricing_history.top().value;
@@ -121,7 +122,8 @@ int inventory::get_lowest_price(int input_upc) {
 int inventory::get_highest_price(int input_upc) {
     for(inventory_node* current = head; current; current = current->next){
         if(current->upc == input_upc){
-            stack pricing_history = current->price;
+            stack pricing_history = stack();
+            pricing_history = current->price;
             int highest_price = pricing_history.top().value;
             while(!pricing_history.empty()){
                 if(pricing_history.top().value>highest_price) highest_price = pricing_history.top().value;

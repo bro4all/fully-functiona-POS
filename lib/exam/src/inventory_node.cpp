@@ -10,6 +10,8 @@ inventory_node::inventory_node(int input_upc, std::string input_name, int input_
     to_add.value = input_price;
     to_add.date = date;
     price.push(to_add);
+
+    next = nullptr;
 }
 
 inventory_node::~inventory_node()=default;
