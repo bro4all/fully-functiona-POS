@@ -33,6 +33,7 @@ public:
     void adjust_inventory(int input_upc, int new_inventory);
 
     void sort_by_lowest_price();
+    inventory_node* get_head();
 };
 
 #endif

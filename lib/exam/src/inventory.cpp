@@ -1,6 +1,5 @@
 #include "../inc/inventory.h"
 #include <random>
-//TODO: Write UPC Functions
 int inventory::reserve_upc() {
     srand(42);
     auto random_upc_location = int(rand()%upc_generator.size());
@@ -13,11 +12,15 @@ int inventory::reserve_upc() {
 
 void inventory::release_upc(int input_upc) {
     auto val =  upc_generator.find(input_upc);
-    if(val->first == input_upc && !val->second) val->second = true;
+    if(val->first == input_upc && val->second == false){
+        val->second = true;
+        return;
+    }
     else throw "UPC not valid";
 }
 
 bool inventory::valid_upc(int input_upc) {
+    if(input_upc == 0) return false;
     auto val = inventory::upc_generator.find(input_upc);
     return val->first == input_upc;
 }
@@ -65,8 +68,10 @@ void inventory::remove_sku(int input_upc) {
                 if (current->next->upc == input_upc) {
                     inventory_node *temp = current->next;
                     current->next = current->next->next;
+                    temp->next = nullptr;
                     delete temp;
                     release_upc(input_upc);
+                    return;
                 }
             }
         }
@@ -142,6 +147,7 @@ void inventory::adjust_price(int input_upc, int new_price, int new_date) {
             new_pricing.value = new_price;
             new_pricing.date = new_date;
             current->price.push(new_pricing);
+            return;
         }
     }
     throw "not found";
@@ -149,11 +155,17 @@ void inventory::adjust_price(int input_upc, int new_price, int new_date) {
 
 void inventory::adjust_inventory(int input_upc, int new_inventory) {
     for(inventory_node* current = head; current; current = current->next){
-        if(current->upc == input_upc) current->inventory_count = new_inventory;
+        if(current->upc == input_upc){
+            current->inventory_count = new_inventory;
+            return;
+        }
     }
     throw "not found";
 }
 
+inventory_node* inventory::get_head() {
+    return head;
+}
 void inventory::sort_by_lowest_price() {
     //TODO: Double Sort Function
 }
