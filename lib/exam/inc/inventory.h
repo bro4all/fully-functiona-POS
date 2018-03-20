@@ -9,26 +9,27 @@ class inventory{
     inventory_node* head;
 
     static std::map<unsigned, bool> upc_generator;
-    static unsigned get_unique_upc();
-    static void remove_upc(int upc);
+    static int reserve_upc();
+    static void release_upc(int input_upc);
+    static bool valid_upc(int input_upc);
 
 public:
     inventory();
     ~inventory();
 
-    void add_sku(std::string name, int price, int inventory, int date);
-    void remove_sku(int upc);
+    void add_sku(std::string new_name, int initial_price, int initial_inventory, int initial_date);
+    void remove_sku(int input_upc);
 
-    std::vector<unsigned int> get_upc(std::string name);
-    int get_price(int upc);
-    int get_inventory(int upc);
-    int get_name(int upc);
+    std::vector<int> get_upc(std::string input_name);
+    int get_price(int input_upc);
+    int get_inventory(int input_upc);
+    std::string get_name(int input_upc);
 
-    int get_lowest_price(int upc);
-    int get_highest_price(int upc);
+    int get_lowest_price(int input_upc);
+    int get_highest_price(int input_upc);
 
-    void adjust_price(int upc, int price, int date);
-    void adjust_inventory(int upc, int inventory);
+    void adjust_price(int input_upc, int new_price, int new_date);
+    void adjust_inventory(int input_upc, int new_inventory);
 
     void sort_by_lowest_price();
 };

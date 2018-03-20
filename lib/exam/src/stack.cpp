@@ -43,6 +43,10 @@ stack &stack::operator=(const stack &RHS) {
     return *this;
 }
 
+bool stack::empty() {
+    return stack_top == nullptr;
+}
+
 stack stack::operator+(const stack &RHS) const {
     stack* to_return = new stack();
     stack_node* left_runner = stack_top;

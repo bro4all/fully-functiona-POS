@@ -5,6 +5,7 @@ inventory_node::inventory_node(int input_upc, std::string input_name, int input_
     name = input_name;
     inventory_count = input_count;
     price = stack();
+
     struct value_date to_add = value_date();
     to_add.value = input_price;
     to_add.date = date;

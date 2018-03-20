@@ -13,6 +13,7 @@ public:
     void pop();
     void push(struct value_date input);
     const struct value_date top() const;
+    bool empty();
 
     stack& operator=(const stack& RHS);
     stack operator+(const stack& RHS) const;
