@@ -1,15 +1,33 @@
 #include "../inc/inventory.h"
+#include <random>
 //TODO: Write UPC Functions
 int inventory::reserve_upc() {
-    return 0;
+    auto random_upc_location = int(rand()%upc_generator.size());
+    auto a = upc_generator.begin();
+    for(auto a = upc_generator.begin(); --random_upc_location != 0; a++);
+    while(!a->second && a != upc_generator.end()) a++;
+    a->second = false;
+    return a->first;
 }
 
-void inventory::release_upc(int upc) {
-
+void inventory::release_upc(int input_upc) {
+    auto val = upc_generator[input_upc];
+    if(!valid_upc(input_upc)) throw "UPC not in map";
+    else upc_generator[input_upc] = true;
 }
 
 bool inventory::valid_upc(int input_upc) {
+    auto val = upc_generator[input_upc];
+    if(val == upc_generator.end()) return false;
+    return true;
+}
 
+void inventory::initialize_upc() {
+    srand(17); // Initial seed
+    for(int i = 1; i< 100000; i++) {
+        int unique_upc = 1000000 + rand() % 9000000;
+        upc_generator.insert(std::pair(unique_upc, true));
+    }
 }
 
 inventory::inventory(){
@@ -58,7 +76,7 @@ void inventory::remove_sku(int input_upc) {
 }
 
 std::vector<int> inventory::get_upc(std::string input_name) {
-    std::vector upcs_to_return;
+    std::vector<int> upcs_to_return;
     for(inventory_node* current = head; current; current = current->next){
         if(current->name == input_name) upcs_to_return.push_back(current->upc);
     }
@@ -117,17 +135,15 @@ int inventory::get_highest_price(int input_upc) {
 }
 
 void inventory::adjust_price(int input_upc, int new_price, int new_date) {
-    void inventory::adjust_inventory(int input_upc, int new_inventory) {
-        for(inventory_node* current = head; current; current = current->next){
-            if(current->upc == input_upc){
-                value_date new_pricing = value_date();
-                new_pricing.value = new_price;
-                new_pricing.date = new_date;
-                current->price.push(new_pricing);
-            }
+    for(inventory_node* current = head; current; current = current->next){
+        if(current->upc == input_upc){
+            value_date new_pricing = value_date();
+            new_pricing.value = new_price;
+            new_pricing.date = new_date;
+            current->price.push(new_pricing);
         }
-        throw "not found";
     }
+    throw "not found";
 }
 
 void inventory::adjust_inventory(int input_upc, int new_inventory) {

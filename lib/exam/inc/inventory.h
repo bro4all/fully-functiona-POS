@@ -8,10 +8,11 @@
 class inventory{
     inventory_node* head;
 
-    static std::map<unsigned, bool> upc_generator;
+    static std::map<int, bool> upc_generator;
     static int reserve_upc();
     static void release_upc(int input_upc);
     static bool valid_upc(int input_upc);
+    static void initialize_upc();
 
 public:
     inventory();
