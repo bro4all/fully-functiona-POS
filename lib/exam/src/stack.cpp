@@ -26,12 +26,13 @@ void stack::pop() {
 }
 
 void stack::push(struct value_date input) {
-    stack_node * nodeIn=new stack_node;
+    stack_node* nodein= new stack_node(input);
+
     if(stack_top == NULL) {
-        stack_node = nodeIn;
+        stack_top= nodein;
     }else {
-        nodeIn = stack_top;
-        stack_node= nodeIn;
+        nodein = stack_top;
+        stack_top= nodein;
     }
 }
 
@@ -48,7 +49,13 @@ bool stack::empty() {
 }
 
 stack &stack::operator=(const stack &RHS) {
-    //return <#initializer#>;
+    stack_node *copy = RHS.stack_top;
+    stack_node*current = new stack_node(copy->data);
+    while(current->next!=NULL){
+        current = current->next;
+        copy = copy->next;
+        current->data = copy->data;
+    }
 }
 
 stack stack::operator+(const stack &RHS) const {
