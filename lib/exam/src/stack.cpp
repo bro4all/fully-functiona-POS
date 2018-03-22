@@ -26,7 +26,13 @@ void stack::pop() {
 }
 
 void stack::push(struct value_date input) {
-
+    stack_node * nodeIn=new stack_node;
+    if(stack_top == NULL) {
+        stack_node = nodeIn;
+    }else {
+        nodeIn = stack_top;
+        stack_node= nodeIn;
+    }
 }
 
 const struct value_date stack::top() const {
