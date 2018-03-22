@@ -1,15 +1,30 @@
 #include "../inc/stack.h"
-
+#include "iostream"
 stack::stack() {
-
+stack_top= nullptr;
 }
 
 stack::~stack() {
-
+    while (stack_top) {
+        stack_node *temp = stack_top->next;
+        delete stack_top;
+        stack_top = temp;
+    }
 }
 
 void stack::pop() {
-
+    {
+        if(stack_top == nullptr) {
+            throw "nothing to pop";
+        }
+        else
+        {
+            stack_node * old = top;
+            top = top->next;
+            count--;
+            delete(old);
+        }
+    }
 }
 
 void stack::push(struct value_date input) {
@@ -31,4 +46,3 @@ stack &stack::operator=(const stack &RHS) {
 stack stack::operator+(const stack &RHS) const {
     return stack();
 }
-//damn this is hard

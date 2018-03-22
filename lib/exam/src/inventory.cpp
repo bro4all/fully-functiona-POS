@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include "../inc/inventory.h"
 
 int inventory::reserve_upc() {
