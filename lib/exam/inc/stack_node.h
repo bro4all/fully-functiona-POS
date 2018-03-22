@@ -13,5 +13,4 @@ public:
 
     explicit stack_node(value_date data) : data(data), next(nullptr){};
 };
-
 #endif

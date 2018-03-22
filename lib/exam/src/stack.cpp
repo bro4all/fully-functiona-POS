@@ -31,3 +31,4 @@ stack &stack::operator=(const stack &RHS) {
 stack stack::operator+(const stack &RHS) const {
     return stack();
 }
+//damn this is hard
