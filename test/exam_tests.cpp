@@ -495,6 +495,7 @@ TEST_F(InventoryFixture, HighLowPriceTests){
 TEST_F(InventoryFixture, SortTests){
     test_inventory.sort_by_lowest_price();
     inventory_node* runner = test_inventory.get_head();
+    EXPECT_NE(nullptr, runner);
     while(runner && runner->next) {
         int price_a = runner->price.top().value;
         int price_b = runner->next->price.top().value;
@@ -502,7 +503,7 @@ TEST_F(InventoryFixture, SortTests){
         if(price_a == price_b){
             int inv_a = runner->inventory_count;
             int inv_b = runner->next->inventory_count;
-            EXPECT_LE(inv_a,inv_b);
+            EXPECT_GE(inv_a,inv_b);
         }
         runner = runner->next;
     }

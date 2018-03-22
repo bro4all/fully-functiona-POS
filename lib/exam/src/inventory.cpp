@@ -12,7 +12,7 @@ int inventory::reserve_upc() {
 
 void inventory::release_upc(int input_upc) {
     auto val =  upc_generator.find(input_upc);
-    if(val->first == input_upc && val->second == false){
+    if(val->first == input_upc && !val->second){
         val->second = true;
         return;
     }

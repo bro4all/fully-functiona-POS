@@ -1,5 +1,5 @@
 # Lab Exam 1 #
-###### Tuesday, 20 March 2018 ######
+###### Thursday, 22 March 2018 ######
 
 For this exam you will be implementing a basic inventory system using linked lists and stacks. The framework and tests for the exam have been provided for you in this repository. You will have 3 hour to implement all of the functions and verify they work using the tests provided to you. These are the tests you lab exam will be graded on. 
 

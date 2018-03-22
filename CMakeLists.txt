@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(CMPE126Exam1-Tuesday)
+project(CMPE126Exam1-Thursday)
 
 if(WIN32)
     if (CYGWIN)
