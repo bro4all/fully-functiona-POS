@@ -13,18 +13,16 @@ stack::~stack() {
 }
 
 void stack::pop() {
+    stack_node *temp;
+    if(stack_top==NULL)
     {
-        if(stack_top == nullptr) {
-            throw "nothing to pop";
-        }
-        else
-        {
-            stack_node * old = top;
-            top = top->next;
-            count--;
-            delete(old);
-        }
+        throw "stack is empty";
     }
+    temp=stack_top;
+    stack_top=stack_top->next;
+
+    delete temp;
+
 }
 
 void stack::push(struct value_date input) {
@@ -36,7 +34,11 @@ const struct value_date stack::top() const {
 }
 
 bool stack::empty() {
-    return false;
+    if(stack_top == nullptr){
+        return true;
+    }
+    else
+        return false;
 }
 
 stack &stack::operator=(const stack &RHS) {
