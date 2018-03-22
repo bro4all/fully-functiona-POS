@@ -85,15 +85,34 @@ inventory_node*previous;
 }
 
 std::vector<int> inventory::get_upc(std::string input_name) {
+    inventory_node* curr=head;
+    while(curr!=NULL){
+        std::string strng=curr->name;
+        if(strng.compare(input_name)==0){
+            return  std::vector<int>();
+        }
+    }
     return std::vector<int>();
 }
 
 int inventory::get_price(int input_upc) {
-    get_price(input_upc);
+    inventory_node* curr=head;
+    while(curr!= nullptr){
+        if(curr->upc==input_upc){
+            return curr->price.top().value;
+        }
+        curr=curr->next;
+    }
     return 0;
 }
 
 int inventory::get_inventory(int input_upc) {
+    inventory_node* curr=head;
+    while(curr!= nullptr){
+        if(curr->upc==input_upc){
+            return curr
+        }
+    }
     return 0;
 }
 
