@@ -35,19 +35,53 @@ void inventory::initialize_upc() {
 }
 
 inventory::inventory() {
-
+head= nullptr;
 }
 
 inventory::~inventory() {
+inventory_node *tmp=head;
+    while(tmp!= nullptr){
+        tmp=tmp->next;
+        delete tmp;
 
+    }
 }
 
 void inventory::add_sku(std::string new_name, int initial_price, int initial_inventory, int initial_date) {
-
+if (head== nullptr){
+    head=new inventory_node(1,new_name,initial_inventory,initial_price,initial_date);
+}
+    else{
+    inventory_node*current=head;
+    while(current){
+        inventory_node* tmp=new inventory_node(reserve_upc(),new_name,initial_inventory,initial_price,initial_date);
+        current->next=tmp;
+        current=tmp;
+    }
+}
 }
 
 void inventory::remove_sku(int input_upc) {
+inventory_node*previous;
+    inventory_node *current;
+    int count=0;
+    previous= nullptr;
+    current=head;
+    if(head== nullptr){
+        throw"this is empty yo";
 
+    }
+    while(count !=input_upc){
+        previous=current;
+        current=current->next;
+    }
+    if(previous!= nullptr){
+        previous->next=current->next;
+        delete current;
+    }
+    if(previous== nullptr){
+        head=current->next;
+    }
 }
 
 std::vector<int> inventory::get_upc(std::string input_name) {
@@ -55,6 +89,7 @@ std::vector<int> inventory::get_upc(std::string input_name) {
 }
 
 int inventory::get_price(int input_upc) {
+    get_price(input_upc);
     return 0;
 }
 
