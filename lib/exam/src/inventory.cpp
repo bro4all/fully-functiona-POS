@@ -145,7 +145,18 @@ int inventory::get_lowest_price(int input_upc) {
 }
 
 int inventory::get_highest_price(int input_upc) {
-    return 0;
+    int count = 0;
+    inventory_node *curr;
+    curr = head;
+    int a = curr->price.top().value;
+    while(count >= input_upc){
+        if(curr->price.top().value < a) {
+            a = curr->price.top().value;
+        }
+        count ++;
+        curr=curr->next;
+    }
+    return a;
 }
 
 void inventory::adjust_price(int input_upc, int new_price, int new_date) {
