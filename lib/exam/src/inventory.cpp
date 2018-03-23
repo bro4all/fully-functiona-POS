@@ -130,13 +130,18 @@ std::string inventory::get_name(int input_upc) {
 }
 
 int inventory::get_lowest_price(int input_upc) {
-    inventory_node* curr=head;
-    while(curr!=NULL){
-       if(curr->upc==input_upc){
-
-       }
+    int count = 0;
+    inventory_node *curr;
+    curr = head;
+    int a = curr->price.top().value;
+    while(count <= input_upc){
+        if(curr->price.top().value < a) {
+            a = curr->price.top().value;
+        }
+        count ++;
+        curr=curr->next;
     }
-    return 0;
+    return a;
 }
 
 int inventory::get_highest_price(int input_upc) {
