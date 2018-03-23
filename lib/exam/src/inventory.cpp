@@ -110,17 +110,32 @@ int inventory::get_inventory(int input_upc) {
     inventory_node* curr=head;
     while(curr!= nullptr){
         if(curr->upc==input_upc){
-            return curr
+            return curr->inventory_count;
         }
+        curr=curr->next;
     }
     return 0;
 }
 
 std::string inventory::get_name(int input_upc) {
+    inventory_node* curr=head;
+    while(curr->next!= nullptr){
+        curr=curr->next;
+        if(curr->upc==input_upc){
+            return  curr->name;
+        }
+
+    }
     return std::string();
 }
 
 int inventory::get_lowest_price(int input_upc) {
+    inventory_node* curr=head;
+    while(curr!=NULL){
+       if(curr->upc==input_upc){
+
+       }
+    }
     return 0;
 }
 
@@ -129,11 +144,23 @@ int inventory::get_highest_price(int input_upc) {
 }
 
 void inventory::adjust_price(int input_upc, int new_price, int new_date) {
+inventory_node* curr=head;
+    while(curr!= nullptr){
+        if(curr->upc==input_upc){
+            curr->price.pop();
 
+        }
+    }
 }
 
 void inventory::adjust_inventory(int input_upc, int new_inventory) {
-
+    inventory_node* curr=head;
+    while(curr->next!= nullptr){
+        curr=curr->next;
+        if(curr->upc==input_upc){
+            curr->inventory_count=new_inventory;
+        }
+    }
 }
 
 void inventory::sort_by_lowest_price() {
