@@ -9,7 +9,7 @@ inventory_node::inventory_node(int input_upc, std::string input_name, int input_
     a.date = date;
     price.push(a);
     next = nullptr;
-    
+
 }
 
 inventory_node::~inventory_node()=default;
